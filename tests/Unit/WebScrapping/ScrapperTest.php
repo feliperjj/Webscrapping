@@ -5,22 +5,17 @@ namespace Chuva\Tests\Unit\WebScrapping\WebScrapping;
 use Chuva\Php\WebScrapping\Scrapper;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Tests requirements for Scrapper.
- */
 class ScrapperTest extends TestCase {
 
-  /**
-   * Tests scrap count.
-   */
   public function testScrapSignature() {
-    $dom = new \DOMDocument('1.0', 'utf-8');
-    @$dom->loadHTML('<html><body><p>Chove Chuva</p></body></html>');
+    $filePath = 'path/to/your/html/file.html';
+    $outputCsvPath = 'path/to/your/output.csv';
 
     $scrapper = new Scrapper();
-    $results = $scrapper->scrap($dom);
+    $result = $scrapper->scrapAndWriteToCsv($filePath, $outputCsvPath);
 
-    $this->assertIsArray($results);
+    $this->assertTrue($result);
   }
 
 }
+
