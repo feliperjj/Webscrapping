@@ -1,5 +1,4 @@
 <?php
-
 namespace Chuva\Php\WebScrapping;
 
 class Scrapper {
@@ -7,28 +6,25 @@ class Scrapper {
         $html = file_get_contents($filePath);
 
         if ($html === false) {
-            echo "Error loading HTML file: $filePath\n";
             return false;
         }
 
         $dom = new \DOMDocument('1.0', 'utf-8');
         libxml_use_internal_errors(true);
+        
         if (!$dom->loadHTML($html)) {
-            echo "Error loading HTML into DOMDocument\n";
+            libxml_clear_errors();
             return false;
         }
         libxml_clear_errors();
 
         $cards = $dom->getElementsByTagName('a');
 
-      
         $file = fopen($outputCsvPath, 'w');
         if ($file === false) {
-            echo "Error opening CSV file for writing: $outputCsvPath\n";
             return false;
         }
 
-        // Write CSV headers
         fputcsv($file, ['ID', 'Title', 'Type', 'Authors', 'Institutions']);
 
         foreach ($cards as $card) {
@@ -63,7 +59,6 @@ class Scrapper {
                     }
                 }
 
-
                 $authorNames = array_column($authors, 'name');
                 $authorInstitutions = array_column($authors, 'institution');
                 fputcsv($file, [
@@ -76,14 +71,10 @@ class Scrapper {
             }
         }
 
-        // Close the CSV file
         fclose($file);
 
         return true;
     }
 }
-
-
-
 
 
